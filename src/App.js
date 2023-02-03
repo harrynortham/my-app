@@ -13,14 +13,14 @@ function App(props) {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <header className="App-header bg-slate-900">
         <img src={logo} className="App-logo" alt="logo" />
 
-        <div className="container mx-auto bg-gray-200 rounded-xl shadow border p-8 m-10">
-          <p className="text-3xl text-gray-700 font-bold mb-5">
+        <div className="container mx-auto bg-slate-800 rounded-xl p-8 m-10">
+          <p className="text-3xl text-white font-bold mb-5">
             Welcome {subject}!
           </p>
-          <p className="text-gray-500 text-lg">
+          <p className="text-slate-50 text-lg">
             React and Tailwind CSS in action
           </p>
         </div>
