@@ -27,13 +27,13 @@ function App(props) {
           <div className="mb-4">
             <label
               className="block text-white text-sm font-bold mb-2"
-              htmlFor="username"
+              htmlFor="todo"
             >
               What should we do?
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
+              id="todo"
               type="text"
               placeholder="Tell me"
             />
