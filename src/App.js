@@ -1,4 +1,5 @@
-import logo from "./logo.svg";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./firebase";
 import "./App.css";
 
 function App(props) {
