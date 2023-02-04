@@ -11,20 +11,43 @@ function App(props) {
 
   console.log(props);
 
-  return (
-    <div className="App">
-      <header className="App-header bg-slate-900">
-        <img src={logo} className="App-logo" alt="logo" />
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log("hello");
+  }
 
-        <div className="container mx-auto bg-slate-800 rounded-xl p-8 m-10">
-          <p className="text-3xl text-white font-bold mb-5">
-            Welcome {subject}!
-          </p>
-          <p className="text-slate-50 text-lg">
-            React and Tailwind CSS in action
-          </p>
-        </div>
-      </header>
+  return (
+    <div className="App bg-slate-900 p-8 h-screen">
+      <div className="container mx-auto bg-slate-800 rounded-xl p-8 max-w-lg">
+        {/*<p className="text-3xl text-white font-bold mb-5">Welcome {subject}!</p>*/}
+        <p className="text-slate-50 text-lg">
+          React and Tailwind CSS in action
+        </p>
+        <form onSubmit={handleSubmit} className="mt-5">
+          <div className="mb-4">
+            <label
+              className="block text-white text-sm font-bold mb-2"
+              htmlFor="username"
+            >
+              What should we do?
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="username"
+              type="text"
+              placeholder="Tell me"
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              Add
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
