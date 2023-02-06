@@ -7,13 +7,24 @@ export function Register(props) {
   //set State for validation and eror messages
   const [error, setError] = useState();
 
+  const [userInfo, setUserInfo] = useState({
+    email: "",
+    password: "",
+  });
+
+  //update state when field values change
+  //read up on spread operator more
+  function handleChange(event) {
+    setUserInfo({ ...userInfo, [event.target.name]: event.target.value });
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
 
     //validate user input first with validator package
     //send email verification email
 
-    createUserWithEmailAndPassword(auth, "dummy@dummy.com", "dummy1")
+    createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password)
       .then((userCredential) => {
         // Signed in
         let user = userCredential.user;
@@ -22,7 +33,7 @@ export function Register(props) {
       })
       .catch((error) => {
         const errorCode = error.code;
-        const errorMessage = error.message;
+        // const errorMessage = error.message;
         // ..
         setError(errorCode);
       });
@@ -55,9 +66,12 @@ export function Register(props) {
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              onChange={handleChange}
+              name="email"
               id="email"
               type="text"
               placeholder="Email Address"
+              value={userInfo.email}
             />
           </div>
           <div className="mb-4">
@@ -69,9 +83,12 @@ export function Register(props) {
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              onChange={handleChange}
               id="password"
               type="password"
+              name="password"
               placeholder="Password"
+              value={userInfo.password}
             />
           </div>
           <div className="flex items-center justify-between mt-8">
