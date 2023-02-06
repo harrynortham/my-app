@@ -77,7 +77,7 @@ export function Register(props) {
           <div className="flex items-center justify-between mt-8">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline inline-block"
             >
               Create account
             </button>
