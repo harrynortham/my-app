@@ -1,28 +1,50 @@
+import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
+import validator from "validator";
 
-function Register(props) {
-  //const subject = props.subject;
-  //variables can be dispayed using curly braces: {subject}
-
-  //component props, props are the same as attributes used in html, example <App subject="Clarice" />
-
-  //https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/React_getting_started
-
-  //console.log(props);
+export function Register(props) {
+  //set State for validation and eror messages
+  const [error, setError] = useState();
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("clicked");
+
+    //validate user input first with validator package
+    //send email verification email
+
+    createUserWithEmailAndPassword(auth, "dummy@dummy.com", "dummy1")
+      .then((userCredential) => {
+        // Signed in
+        let user = userCredential.user;
+        // ..
+        console.log(user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+        setError(errorCode);
+      });
   }
 
   return (
     <div className="App bg-slate-900 p-8 h-screen">
       <div className="container mx-auto bg-slate-800 rounded-xl p-8 max-w-lg">
-        {/*<p className="text-3xl text-white font-bold mb-5">Welcome {subject}!</p>*/}
-        <p className="text-slate-50 text-lg">
-          React and Tailwind CSS in action
-        </p>
+        <h1 className="text-slate-50 text-2xl">Registration</h1>
+
+        {/* Add conditional rendering to display success/ check email for verification email or go to dashboard message upon successful signup */}
+
+        {error && (
+          <div
+            className="bg-red-100 text-red-700 px-4 py-3 rounded mt-5"
+            role="alert"
+          >
+            <strong className="font-bold">Error </strong>
+            <span className="block sm:inline">{error}</span>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="mt-5">
           <div className="mb-4">
             <label
@@ -32,18 +54,32 @@ function Register(props) {
               Email Address
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="email"
               type="text"
               placeholder="Email Address"
             />
           </div>
-          <div className="flex items-center justify-between">
+          <div className="mb-4">
+            <label
+              className="block text-white text-sm font-bold mb-2"
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="password"
+              type="password"
+              placeholder="Password"
+            />
+          </div>
+          <div className="flex items-center justify-between mt-8">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline"
             >
-              Register
+              Create account
             </button>
           </div>
         </form>
@@ -51,5 +87,3 @@ function Register(props) {
     </div>
   );
 }
-
-export default Register;
