@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import validator from "validator";
+import { Link } from "react-router-dom";
 
 //CREATE PASSWORD RULES TO SUGGEST STRONG PASSWORD TO USERS
 //At least one uppercase letter
@@ -13,21 +14,11 @@ import validator from "validator";
 //SEND LINK TO VALIDATE EMAIL ADDRESS
 //CREATE PAGE TO RESET FORGOTTEN PASSWORD
 
-export function Register() {
-  //set State for validation and eror messages
+export default function Register() {
+  //set state for fields and error messages
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState();
-  const [success, setSuccess] = useState();
-
-  const [userInfo, setUserInfo] = useState({
-    email: "",
-    password: "",
-  });
-
-  //update state when field values change
-  //read up on spread operator more
-  function handleChange(event) {
-    setUserInfo({ ...userInfo, [event.target.name]: event.target.value });
-  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -35,25 +26,22 @@ export function Register() {
     //validate user input first with validator package
     //send email verification email
 
-    if (!validator.isEmail(userInfo.email)) {
+    if (!validator.isEmail(email)) {
       setError("this email is invalid");
-    } else if (userInfo.password.length < 6) {
+    } else if (password.length < 6) {
       setError("password too short. please enter 6 characters or more");
     } else {
-      createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password)
+      createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          // Signed in
+          // User signed in? Does this work when asking for email verification?
           let user = userCredential.user;
-          // ..
           console.log(user);
-          //create users collection in firestore and save first name / last name
-          //use the UID as the document ID
-          setSuccess(true);
+          //FUNCTION to send verification email
+
+          //FUNCTION to create users collection in firestore and save first name / last name, use the UID as the document ID
         })
         .catch((error) => {
           //show firebase auth errors
-          //const errorCode = error.code;
-
           const errorCode = {
             "auth/email-already-in-use": "Email is already in use",
             "auth/invalid-email": "Invalid email address",
@@ -66,91 +54,74 @@ export function Register() {
     }
   }
 
-  //CHECK BEST WAY TO CONDITIONAL RENDER
+  return (
+    <div className="App bg-slate-900 p-8 h-screen">
+      <div className="container mx-auto bg-slate-800 rounded-xl p-8 max-w-lg">
+        <h1 className="text-slate-50 text-2xl">Registration</h1>
 
-  if (success) {
-    return (
-      <div className="App bg-slate-900 p-8 h-screen">
-        <div className="container mx-auto bg-slate-800 rounded-xl p-8 max-w-lg">
+        {error && (
           <div
-            className="bg-green-100 text-green-700 px-3 py-2 rounded"
+            className="bg-red-100 text-red-700 px-3 py-2 rounded mt-5"
             role="alert"
           >
-            <strong className="font-bold">Success </strong>
-            <span className="block sm:inline">
-              You account has been created you can now visit the{" "}
-              <u>Dashboard</u>
-            </span>
+            <strong className="font-bold">Error </strong>
+            <span className="block sm:inline">{error}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="mt-5">
+          <div className="mb-4">
+            <label
+              className="block text-white text-sm font-bold mb-2"
+              htmlFor="email"
+            >
+              Email Address
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              id="email"
+              type="text"
+              placeholder="Email Address"
+              value={email}
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-white text-sm font-bold mb-2"
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              onChange={(e) => setPassword(e.target.value)}
+              id="password"
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={password}
+            />
+          </div>
+          <div className="flex items-center justify-between mt-7">
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline inline-block"
+            >
+              Create account
+            </button>
+          </div>
+        </form>
+        <div className="flex items-center justify-between mt-8">
+          <div className="text-sm text-white ">
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-500 hover:underline">
+              Login{" "}
+            </Link>
           </div>
         </div>
       </div>
-    );
-  } else {
-    return (
-      <div className="App bg-slate-900 p-8 h-screen">
-        <div className="container mx-auto bg-slate-800 rounded-xl p-8 max-w-lg">
-          <h1 className="text-slate-50 text-2xl">Registration</h1>
-
-          {/* Add conditional rendering to display success/ check email for verification email or go to dashboard message upon successful signup */}
-
-          {error && (
-            <div
-              className="bg-red-100 text-red-700 px-3 py-2 rounded mt-5"
-              role="alert"
-            >
-              <strong className="font-bold">Error </strong>
-              <span className="block sm:inline">{error}</span>
-            </div>
-          )}
-
-          {/*Create stepped navigation, email and password last */}
-
-          <form onSubmit={handleSubmit} className="mt-5">
-            <div className="mb-4">
-              <label
-                className="block text-white text-sm font-bold mb-2"
-                htmlFor="email"
-              >
-                Email Address
-              </label>
-              <input
-                className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                onChange={handleChange}
-                name="email"
-                id="email"
-                type="text"
-                placeholder="Email Address"
-                value={userInfo.email}
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-white text-sm font-bold mb-2"
-                htmlFor="password"
-              >
-                Password
-              </label>
-              <input
-                className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                onChange={handleChange}
-                id="password"
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={userInfo.password}
-              />
-            </div>
-            <div className="flex items-center justify-between mt-8">
-              <button
-                type="submit"
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline inline-block"
-              >
-                Create account
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    );
-  }
+    </div>
+  );
 }

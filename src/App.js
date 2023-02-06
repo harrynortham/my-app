@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import NotFound from "./NotFound";
-import { Register } from "./auth/Register";
+import Register from "./auth/Register";
 import Login from "./auth/Login";
 
 export default function App() {
